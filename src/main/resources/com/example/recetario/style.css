@@ -1,0 +1,24 @@
+.ventana{
+
+    -fx-background-image: url("img/fondoooo.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.trans{
+    -fx-background-color: rgba(0,0,0,0.5);
+}
+
+#titulo {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+
+}
+#tabla td{
+    -fx-font-size: 30px;
+}
+
+.info{
+    -fx-background-color: green;
+   /*-fx-padding: 5px 20px;*/
+}

@@ -2,6 +2,8 @@ package com.example.recetario;
 
 import com.example.recetario.models.Receta;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -71,6 +73,21 @@ public class ventanaPrincipalController implements Initializable {
         listtipo.getItems().addAll("Desayuno", "Segundo desayuno", "Almuerzo", "Sobrealmuerzo", "Merienda", "Cena", "ReCena","PostCena");
         listtipo.getSelectionModel().select(0);
 
+        sliderduracion.valueProperty().addListener((observableValue, number, t1) -> labelduracion.setText(t1.intValue()+ " min"));
+
+        //txtnombre.textProperty().addListener((ob, vold, vnew)->(info.setText("antiguo: "+vold" Nuevo: "+vnew)));
+
+        tabla.getSelectionModel().selectedItemProperty().addListener(
+                (observable, vold, vnew)->{
+                    info.setText(vnew.toString());
+                    txtnombre.setText(vnew.getNombre());
+                    sliderduracion.setValue(vnew.getDuracion());
+                    listtipo.getSelectionModel().select(vnew.getTipo());
+                    combodificultad.getSelectionModel().select(vnew.getDificultad());
+                    
+                }
+        );
+
         /*
         ObservableList<String> datos = FXCollections.observableArrayList();
         datos.addAll("","");
@@ -114,7 +131,8 @@ public class ventanaPrincipalController implements Initializable {
 
     @FXML
     public void actualizarDuracion(Event event) {
-        labelduracion.setText(Math.round(sliderduracion.getValue())+ " min");
+        //labelduracion.setText(Math.round(sliderduracion.getValue())+ " min");
+
     }
 
 
