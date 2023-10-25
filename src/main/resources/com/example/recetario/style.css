@@ -22,3 +22,12 @@
     -fx-background-color: green;
    /*-fx-padding: 5px 20px;*/
 }
+.table-view .table-cell{
+    -fx-border-color: whitesmoke;
+    -fx-padding: 10 px;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #93f9b911;
+    -fx-text-background-color: red;
+}

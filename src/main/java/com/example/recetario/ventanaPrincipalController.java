@@ -10,6 +10,12 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -40,6 +46,17 @@ public class ventanaPrincipalController implements Initializable {
     private Label info;
     @FXML
     private TableColumn<Receta,String> cnombre;
+    @FXML
+    private MenuItem menusalir;
+    @FXML
+    private MenuItem menuacercade;
+    @FXML
+    private ComboBox<Receta> comborecetas;
+    @FXML
+    private ToggleGroup dificultad;
+    @FXML
+    private ImageView carita;
+    private MediaPlayer mediaPlayer;
 
     @FXML
     protected void onHelloButtonClick() {
@@ -62,10 +79,29 @@ public class ventanaPrincipalController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        Media sonido = new Media(HelloApplication.class.getClassLoader().getResource("com/example/recetario/audio/clic.wav").toExternalForm());
+        mediaPlayer.seek(new Duration(0));
+        mediaPlayer = new MediaPlayer(sonido);
+
+
+
         combodificultad.getItems().add("Facil");
         combodificultad.getItems().add("Medio");
         combodificultad.getItems().add("Dificil");
         combodificultad.getSelectionModel().selectFirst();
+
+        combodificultad.valueProperty().addListener((observableValue, s, t1) -> {
+                String imagen = "neutral.png";
+                if(t1=="Facil"){
+                    imagen = "Feliz.png";
+                }
+                else if(t1=="Dificil") {
+                    imagen = "muerto.png";
+                }
+                carita.setImage(new Image("com/example/recetario/img/"+imagen));
+               // mediaPlayer.play();
+
+        });
 
         sliderduracion.setValue(60);
         labelduracion.setText(Math.round(sliderduracion.getValue())+ " min");
@@ -87,12 +123,6 @@ public class ventanaPrincipalController implements Initializable {
                     
                 }
         );
-
-        /*
-        ObservableList<String> datos = FXCollections.observableArrayList();
-        datos.addAll("","");
-        comboDificultad.setItems(datos);
-        */
 
 
 
@@ -121,13 +151,27 @@ public class ventanaPrincipalController implements Initializable {
         tabla.getItems().add(new Receta("Sopa de pollo casera", "Cena", 40, "Difícil"));
         tabla.getItems().add(new Receta("Pancakes con sirope de arce", "Desayuno", 25, "Moderada"));
 
+        comborecetas.setConverter(new StringConverter<Receta>() {
+            @Override
+            public String toString(Receta receta) {
+               if(receta!=null) {return receta.getNombre();}
+               else {return null;}
+            }
 
+            @Override
+            public Receta fromString(String s) {
+                return null;
+            }
+        });
 
+        comborecetas.getItems().addAll(tabla.getItems());
 
 
 
 
     }
+
+
 
     @FXML
     public void actualizarDuracion(Event event) {
@@ -136,8 +180,29 @@ public class ventanaPrincipalController implements Initializable {
     }
 
 
+    @FXML
+    public void salir(ActionEvent actionEvent) {
+        System.exit(0);
+    }
+
+    @FXML
+    public void acercade(ActionEvent actionEvent) {
+        var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("El Creador");
+        alert.setContentText("Er Danie");
+        alert.showAndWait();
+
+    }
 
 
+    @FXML
+    public void mostrarreceta(ActionEvent actionEvent) {
+
+        //System.out.println(comborecetas.getSelectionModel().getSelectedItem());
 
 
+        Session.setRecetaActual(comborecetas.getSelectionModel().getSelectedItem());
+        HelloApplication.loadFXML("ventanaSecundaria.fxml");
+
+    }
 }
